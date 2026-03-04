@@ -1,49 +1,81 @@
-# Foro Hub - API REST 
+# Literalura - Catálogo de Libros
+## Descripción del Proyecto
+Literalura es una aplicación de consola desarrollada en Java que permite gestionar un catálogo de libros y autores. El sistema consume datos de la API de Gutendex y los almacena de forma persistente en una base de datos PostgreSQL utilizando Spring Data JPA.
 
-## Descripción
-Esta es una API RESTful desarrollada como parte del desafío Foro Hub. Permite la gestión de tópicos de un foro, incluyendo funcionalidades completas de CRUD (Crear, Leer, Actualizar, Eliminar) y un sistema de autenticación seguro para proteger las rutas.
+## Funcionalidades Obligatorias
+El proyecto incluye las siguientes capacidades de consulta y gestión:
 
-## Funcionalidades 
-* **Autenticación de Usuarios:** Sistema de login seguro que devuelve un Token JWT.
-* **Gestión de Tópicos:** Rutas protegidas para crear, listar, detallar, actualizar y eliminar información en la base de datos.
-* **Manejo de Errores:** Intercepción global de excepciones para devolver respuestas JSON estructuradas (códigos 400 y 404).
-* **Seguridad de Credenciales:** Uso de variables de entorno para proteger datos sensibles y evitar su exposición en el repositorio.
+Búsqueda de libro por título: Realiza consultas a la API externa para obtener y registrar el primer resultado coincidente.
 
-## Tecnologías Utilizadas 
-* Java
-* Spring Boot (Web, Data JPA, Security)
-* PostgreSQL
-* Flyway (Migraciones de base de datos)
-* Auth0 java-jwt (Generación y validación de tokens)
-* Maven
+Lista de todos los libros: Muestra un listado completo de todas las obras que han sido buscadas y registradas previamente.
 
----
+Lista de autores: Presenta la información de todos los autores cuyos libros están en la base de datos.
 
-##  Configuración y Ejecución Local
+Listar autores vivos en determinado año: Permite filtrar autores que se encontraban con vida en un año específico ingresado por el usuario.
 
-Para ejecutar este proyecto en tu máquina local, sigue estos pasos:
+Listar libros por idioma: Exhibe la cantidad de libros registrados en un idioma seleccionado (ej. español, inglés, francés, portugués).
 
-### 1. Requisitos previos
-* Tener instalado Java (JDK 17 o superior).
-* Tener instalado PostgreSQL.
-* IDE de tu preferencia (IntelliJ IDEA, Eclipse, etc.) o Maven instalado en tu terminal.
+## Tecnologías y Herramientas
+Para el desarrollo de este desafío se utilizaron:
 
-### 2. Configurar la Base de Datos
-Crea una base de datos vacía en PostgreSQL llamada `dbforohub`. Las tablas se crearán automáticamente al iniciar la aplicación gracias a las migraciones de Flyway.
+Java: Lenguaje de programación principal.
 
-### 3. Variables de Entorno (¡Importante!)
-Por motivos de seguridad, las credenciales de la base de datos y la firma del token no están en el código fuente. Antes de ejecutar la aplicación, debes configurar las siguientes **variables de entorno** en tu IDE o sistema operativo:
+Spring Boot: Framework para la configuración y ejecución de la aplicación.
 
-* `DB_USER`: Tu usuario de PostgreSQL (generalmente `postgres`).
-* `DB_PASSWORD`: Tu contraseña de PostgreSQL.
-* `JWT_SECRET`: Una palabra secreta o código para firmar los tokens (puedes usar cualquier valor para pruebas locales, ej. `123456`).
+Spring Data JPA (Hibernate): Para el mapeo de entidades y la persistencia de datos.
 
-*(Si usas IntelliJ IDEA, puedes configurarlas yendo a `Edit Configurations` -> `Environment variables` y añadiendo estas tres claves con tus datos locales).*
+PostgreSQL: Sistema de gestión de bases de datos relacionales.
 
-### 4. Ejecutar la Aplicación
-Una vez configuradas las variables y la base de datos, ejecuta la clase principal `ForohubApplication.java` para iniciar el servidor local en `http://localhost:8080`.
+Jackson: Utilizado para la conversión de atributos JSON a objetos Java.
 
----
+Streams de Java: Implementados para procesar y filtrar colecciones de datos de forma eficiente.
 
-## Autor
-* Carlos Barra
+## Detalles Técnicos Relevantes
+Persistencia: Se crearon entidades de modelo para Libro y Autor, manteniendo una relación entre ambos mediante sus identificadores (ID).
+
+Consultas Inteligentes: Uso de derived queries para recuperar datos específicos de la base de datos, como el filtrado por idioma o años de vida.
+
+Robustez: El sistema está preparado para lidiar con valores inválidos que el usuario pueda ingresar en las consultas de año.
+
+## Instalación y Configuración
+Sigue estos pasos para ejecutar Literalura en tu entorno local:
+
+1. Prerrequisitos
+Asegúrate de tener instalados los siguientes componentes:
+
+Java JDK 17 o superior.
+
+Maven (gestor de dependencias).
+
+PostgreSQL (base de datos relacional).
+
+Un IDE como IntelliJ IDEA o Eclipse.
+
+2. Configuración de la Base de Datos
+Abre tu terminal de PostgreSQL o pgAdmin 4.
+
+Crea una nueva base de datos ejecutando el siguiente comando SQL:
+
+SQL
+
+```
+CREATE DATABASE literalura;
+```
+
+3. Configuración del Proyecto
+Navega hasta el archivo src/main/resources/application.properties y configura tus credenciales locales de PostgreSQL para que Spring Data JPA pueda conectarse:
+```
+Properties
+spring.datasource.url=jdbc:postgresql://localhost:5432/literalura
+spring.datasource.username=tu_usuario_aqui
+spring.datasource.password=tu_contraseña_aqui
+spring.jpa.hibernate.ddl-auto=update
+```
+4. Ejecución de la Aplicación
+Clona este repositorio en tu máquina local.
+
+Importa el proyecto en tu IDE como un proyecto Maven existente.
+
+Ejecuta la clase principal LiteraluraApplication.java.
+
+¡Listo! El menú interactivo aparecerá en tu consola de comandos.
